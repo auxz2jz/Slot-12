@@ -38,23 +38,32 @@ Read this file first.
    - Persistent test progress
    - Test-report generation
 
+4. **CROSS_PLATFORM_COLLABORATION_STANDARD.md**
+   - Required when a project has Android/mobile and Windows/PC implementations or multiple platform agents.
+   - Shared product/feature information
+   - Separate platform ownership
+   - Shared feature propagation
+   - Separate checkpoints and verified baselines
+   - Concurrent-work and overwrite protection
+
 ## Repository maintenance
 
-4. **RULE_INTAKE_WORKFLOW.md**
+5. **RULE_INTAKE_WORKFLOW.md**
    - Defines how new reusable rules are reviewed, merged, split, or added as new categories.
 
-5. **RULE_CHANGELOG.md**
+6. **RULE_CHANGELOG.md**
    - Permanent history of global rules added, changed, clarified, or retired.
 
 ## Required startup order for a new project
 
 1. Read this index.
 2. Read all mandatory global instruction files.
-3. Read the project's own project-memory/checkpoint file.
-4. Read the project's roadmap.
-5. Read the project's testing/diagnostic documentation.
-6. Identify the last user-verified baseline.
-7. Only then plan or modify code.
+3. If the project is cross-platform or has multiple platform workers, read CROSS_PLATFORM_COLLABORATION_STANDARD.md before touching project source.
+4. Read the project's own project-memory/checkpoint file.
+5. Read the project's roadmap.
+6. Read the project's testing/diagnostic documentation.
+7. Identify the last user-verified baseline for the platform being worked on.
+8. Only then plan or modify code.
 
 ## Conflict priority
 
