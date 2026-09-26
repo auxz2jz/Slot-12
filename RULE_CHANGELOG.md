@@ -1,5 +1,25 @@
 # Rule Changelog
 
+## 2026-09-26 — Cross-platform multi-agent collaboration standard added
+
+Added `CROSS_PLATFORM_COLLABORATION_STANDARD.md`.
+
+This standard supports projects where an Android/mobile ChatGPT worker and a Windows/PC agent develop separate implementations of the same product in one GitHub repository.
+
+Key rules include:
+
+- one shared product repository with clearly separated shared, Android, and Windows ownership zones;
+- shared product vision, feature catalog, requirements, decisions, and common data/interface specifications;
+- Android and Windows source, checkpoints, tests, diagnostics, candidate versions, and verified baselines remain separate;
+- shared feature ideas propagate between platforms without requiring identical implementations;
+- each platform evaluates whether shared features are applicable and records platform-specific status;
+- one platform must not modify or overwrite the other platform's implementation without explicit authorization;
+- shared files require latest-version reads, small edits, and conflict reconciliation;
+- separate build/release artifacts and version numbers are allowed;
+- either Android/mobile ChatGPT or a PC agent may initialize a new project;
+- concurrent work safety and optional platform-specific branches are defined;
+- cross-platform recovery must preserve independent verified baselines.
+
 ## 2026-09-25 — Recovery commands generalized and strengthened
 
 Updated `CORE_DEVELOPMENT_RECOVERY_RULES.md` using recovery patterns from multiple existing projects.
