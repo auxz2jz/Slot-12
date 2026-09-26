@@ -2,6 +2,8 @@
 
 Read this file first.
 
+**Canonical repository:** `auxz2jz/master-instruction-library`
+
 ## Mandatory for all software projects
 
 1. **CORE_DEVELOPMENT_RECOVERY_RULES.md**
