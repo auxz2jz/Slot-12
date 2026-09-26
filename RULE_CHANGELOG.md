@@ -2,6 +2,14 @@
 
 This file records global instruction-library changes.
 
+## 2026-09-25 — Repository renamed
+
+The canonical repository was renamed from `auxz2jz/Slot-12` to:
+
+`auxz2jz/master-instruction-library`
+
+No rule behavior changed. This is now the permanent repository identity to reference from future projects.
+
 ## 2026-09-25 — Initial library
 
 Repository initialized in Slot-12 as the future **Master Instruction Library**.
