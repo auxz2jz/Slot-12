@@ -2,6 +2,8 @@
 
 This repository is the reusable source of truth for development rules that should apply across software projects.
 
+**Canonical repository:** `auxz2jz/master-instruction-library`
+
 ## Purpose
 
 Use this repository to store project-wide rules that should be reused in future projects, including:
@@ -48,6 +50,6 @@ When the user identifies a rule they want across projects, add it to the appropr
 
 Do not silently delete or weaken an existing rule when adding a new one. If rules conflict, document the conflict and preserve the user's latest explicit decision.
 
-## Initial status
+## Current status
 
-Initialized as the Master Instruction Library in Slot-12. The repository may be renamed later without changing its purpose.
+This repository was originally initialized as `Slot-12` and was renamed to `master-instruction-library` on 2026-09-25. Its purpose remains the same.
