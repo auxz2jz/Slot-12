@@ -1,5 +1,19 @@
 # Rule Changelog
 
+## 2026-09-25 — Recovery commands generalized and strengthened
+
+Updated `CORE_DEVELOPMENT_RECOVERY_RULES.md` using recovery patterns from multiple existing projects.
+
+Key changes:
+
+- recovery now uses whatever checkpoint/handoff/source-manifest/verification files actually exist instead of assuming fixed filenames;
+- last physically user-verified version takes priority over later unverified candidates;
+- exact source artifact, commit/branch, ZIP/package identity, and hash/checksum are recovered when available and never invented when absent;
+- `CONTINUE FROM CHECKPOINT` now requires only one concise review of newest evidence and then the single recorded next step;
+- `STOP LOOP. CHECKPOINT ONLY.` now records supplied files/results, current version/status, test result, whether a new build actually started, and the single next action;
+- added the anti-loop interrupt `YOU ARE REPEATING WORK. USE THE LAST CONFIRMED RESULT AND MOVE FORWARD ONCE.`;
+- added generic full-recovery and checkpoint-before-build prompt forms.
+
 ## 2026-09-25 — Rule intake workflow added
 
 Added `RULE_INTAKE_WORKFLOW.md`.
