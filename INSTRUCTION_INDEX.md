@@ -40,7 +40,10 @@ Read this file first.
 
 ## Repository maintenance
 
-4. **RULE_CHANGELOG.md**
+4. **RULE_INTAKE_WORKFLOW.md**
+   - Defines how new reusable rules are reviewed, merged, split, or added as new categories.
+
+5. **RULE_CHANGELOG.md**
    - Permanent history of global rules added, changed, clarified, or retired.
 
 ## Required startup order for a new project
