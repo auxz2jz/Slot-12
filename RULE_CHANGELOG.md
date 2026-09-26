@@ -1,5 +1,11 @@
 # Rule Changelog
 
+## 2026-09-25 — Rule intake workflow added
+
+Added `RULE_INTAKE_WORKFLOW.md`.
+
+This establishes the Master Instruction Library as an actively maintained rule system rather than a simple append-only prompt. New user-supplied global rules should now be reviewed against existing instructions and either merged, clarified, split into a subsection, or added as a new category. Duplicate and conflicting rules should be resolved deliberately and documented.
+
 This file records global instruction-library changes.
 
 ## 2026-09-25 — Repository renamed
