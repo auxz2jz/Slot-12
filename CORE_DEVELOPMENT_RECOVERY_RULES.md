@@ -214,38 +214,99 @@ If development becomes confused, repetitive, or starts looping:
 
 Then:
 
-1. Read project memory.
-2. Read latest checkpoint.
-3. Identify last verified baseline.
-4. Identify latest legitimate candidate.
-5. Read current task.
-6. Review errors and failed approaches.
-7. Inspect current source.
-8. Compare with verified source.
-9. Inspect diagnostic evidence.
-10. Identify exact unfinished/failing step.
-11. Write a new plan.
-12. Resume only from that known state.
+1. Read the project's designated checkpoint/handoff/source-of-truth files that actually exist.
+2. If no single designated checkpoint file exists, inspect the repository for the available equivalents, such as project memory, project status, "start here" handoff, verification history, roadmap, source manifest, build/release notes, test-result manifests, or similar files.
+3. Do not fail recovery merely because a particular expected filename is absent. Use the project's actual available recovery files.
+4. Identify the **last version physically tested and confirmed by the user**.
+5. Identify the exact verified source artifact, commit, branch, ZIP/package name, and hash/checksum when those values are available.
+6. If a requested hash or artifact identity was never recorded, state that it is unavailable; never invent it.
+7. Identify the latest legitimate unverified candidate separately.
+8. Ignore later unverified/confused work as a baseline unless the user explicitly verified or approved it.
+9. Read the current task and exact recorded next action.
+10. Review errors and failed approaches.
+11. Inspect current source only as needed to reconcile it with the verified baseline and newest evidence.
+12. Inspect diagnostic evidence.
+13. Identify the exact unfinished/failing step.
+14. Write a new plan only if the checkpoint does not already contain a valid next step.
+15. Resume only from that known state.
+
+### Recovery source-of-truth rule
+
+During recovery, evidence priority is:
+
+1. User's explicit physical test/verification.
+2. Exact verified source artifact/commit/hash recorded with that test.
+3. Latest valid checkpoint/handoff state.
+4. Newest diagnostic/test evidence.
+5. Unverified candidate source.
+6. Older chat discussion or assumptions.
+
+A later-created version does not supersede a physically verified baseline merely because it has a higher version number.
 
 ## 14. Recovery commands
 
-If the user says:
+These commands are intentionally short. They may be used in any project regardless of the exact checkpoint/handoff filenames.
 
-**STOP LOOP. RECOVER LAST VERIFIED CHECKPOINT. NO NEW WORK.**
+### STOP LOOP. RECOVER LAST VERIFIED CHECKPOINT. NO NEW WORK.
 
-Stop development, recover the exact last verified version/source/state, and report it before doing anything else.
+Immediately:
 
-If the user says:
+1. Stop coding, building, editing, and experimentation.
+2. Read the available project checkpoint/handoff/source-manifest/verification files.
+3. Identify the last version the user physically confirmed as working.
+4. Identify its exact source/artifact, commit/branch, and hash/checksum when available.
+5. Ignore later unverified work as a recovery baseline.
+6. Report the recovered state, known problems, and exact next recorded action.
+7. Do not create or modify code until the user instructs you to continue.
 
-**STOP LOOP. CHECKPOINT ONLY.**
+### STOP LOOP. CHECKPOINT ONLY.
 
-Stop development and analysis, save the exact current state and single next action, and do not continue until instructed.
+Immediately:
 
-If the user says:
+1. Stop all current analysis, coding, and build work.
+2. Save the exact current project state to the project's available checkpoint/handoff mechanism.
+3. Record which user-supplied files/results are already available.
+4. Record the current version and whether it is VERIFIED, CANDIDATE, PARTIAL, FAILED, or another accurate status.
+5. Record the latest test result.
+6. Record whether a new version/build has actually started or whether it was only discussed/planned.
+7. Record the current source/artifact identity and hash when available.
+8. Record the single next action.
+9. Do not continue until instructed.
 
-**CONTINUE FROM CHECKPOINT.**
+### CONTINUE FROM CHECKPOINT.
 
-Read the latest checkpoint as the source of truth and perform the recorded next action without repeating completed analysis.
+Immediately:
+
+1. Use the latest valid checkpoint/handoff state as the source of truth.
+2. Confirm the last physically verified baseline.
+3. Review only the newest relevant results once.
+4. Do not repeat analysis already recorded as complete.
+5. Perform the single recorded next build/development step.
+6. If that next step is no longer valid because of new evidence, explain the specific conflict and choose the smallest evidence-based correction.
+
+### YOU ARE REPEATING WORK. USE THE LAST CONFIRMED RESULT AND MOVE FORWARD ONCE.
+
+Treat this as an anti-loop interrupt.
+
+Immediately:
+
+1. Stop rereading/re-explaining/rechecking the same material.
+2. Use the latest confirmed result already established.
+3. Do not repeat the same analysis unless genuinely new evidence requires it.
+4. Perform the next evidence-based action exactly once.
+5. If no valid next action is known, checkpoint the state and identify the single missing piece of evidence rather than continuing to loop.
+
+### Generic full recovery prompt
+
+The following longer form may be used when a project is badly confused:
+
+**STOP. You are stuck in a loop. Do not create or modify any more code. Read the project's available checkpoint, handoff, verification-history, roadmap/status, source-manifest, build/release-note, and test-result files that actually exist. Identify the last version I physically confirmed as working and the exact source artifact/commit/hash when available. Ignore anything created after that unless I explicitly verified it. Tell me the recovered state before doing any more work.**
+
+### Generic checkpoint-before-build prompt
+
+For risky or replacement builds, the user may say:
+
+**Checkpoint first. Before making changes, confirm the last physically verified version, exact source/artifact, hash/checksum when available, and current handoff/checkpoint state. Build the next candidate only from that known source or an explicitly approved successor. Do not overwrite the verified baseline.**
 
 ## Final rule
 
