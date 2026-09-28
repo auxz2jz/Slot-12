@@ -1,5 +1,23 @@
 # Rule Changelog
 
+## 2026-09-27 — Diagnostics made mandatory and program-adaptive
+
+Strengthened `DIAGNOSTICS_STANDARD.md` and `GUIDED_TESTING_STANDARD.md`.
+
+Major additions:
+
+- built-in diagnostics are now mandatory infrastructure for every program under the Master Instruction Library;
+- each program must first be inspected to identify its actual controls, workflows, background jobs, automatic operations, important states, outputs, errors, and existing tests;
+- examples such as Play/Pause/Seek/Tracking are explicitly examples only and must never create assumed controls;
+- added a per-feature Diagnostic Coverage Map requirement;
+- formalized diagnostic sessions with session IDs, timestamps, monotonic time, sequence counters, version/build identity, and optional test/step identity;
+- strengthened JSONL/structured event logging, automatic/programmatic-action logging, high-frequency input throttling, request/result correlation, before/after state, input metadata, and performance timing;
+- strengthened result verification so UI changes/progress indicators/process completion cannot alone prove success;
+- strengthened error/crash preservation and machine-readable test-result export;
+- every important new feature/background operation must extend diagnostics, PASS/FAIL criteria, guided testing, and export coverage;
+- guided tests must be designed from the actual program's real features and internal success signals;
+- added explicit diagnostic-driven error-correction workflow and final reconstruction requirement.
+
 ## 2026-09-26 — Cross-platform multi-agent collaboration standard added
 
 Added `CROSS_PLATFORM_COLLABORATION_STANDARD.md`.
