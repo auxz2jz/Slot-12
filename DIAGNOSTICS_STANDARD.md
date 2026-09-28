@@ -1,8 +1,59 @@
 # Built-In Diagnostics Standard
 
-This standard defines diagnostic capabilities that should be incorporated into applications whenever technically appropriate.
+This standard is **mandatory infrastructure for every software program developed under the Master Instruction Library**.
 
-## 1. Core principle
+The exact implementation must be adapted to the application that actually exists. Do not copy controls, workflows, event names, or tests from another program unless they genuinely apply.
+
+Diagnostics are not a temporary debugging add-on. They are part of the program's permanent architecture and must grow with the program.
+
+## 1. Inspect THIS program before designing diagnostics
+
+Before adding or extending diagnostics, inspect the actual program and identify its real behavior.
+
+At minimum identify, when present:
+
+- important buttons
+- menus
+- toolbar commands
+- context-menu commands
+- toggles and checkboxes
+- sliders
+- text submissions
+- keyboard shortcuts
+- mouse/touch/gesture actions
+- file operations
+- import/export operations
+- navigation
+- settings changes
+- start/stop/cancel/retry actions
+- processing commands
+- background jobs
+- automatic operations
+- asynchronous callbacks
+- major state transitions
+- external-device commands
+- outputs/artifacts that prove success
+- current error handling
+- current logs/tests
+- important internal subsystems
+
+Do not assume the application has Play, Pause, Seek, Zoom, Tracking, or any other example feature.
+
+After inspection, create or update a **Diagnostic Coverage Map** that identifies for each important feature:
+
+- user action or trigger
+- software request/operation
+- important internal state/progress
+- success/result signal
+- failure/error signal
+- PASS criteria
+- FAIL criteria
+- diagnostic events to record
+- guided test coverage
+
+Preserve working architecture. Do not redesign stable software merely to make it resemble another project's diagnostics.
+
+## 2. Core principle
 
 Never treat a user action as proof of software success.
 
@@ -27,9 +78,29 @@ TEST_RESULT → PASS
 
 A button press alone is never sufficient evidence of success.
 
-## 2. Central structured event logger
+## 3. Diagnostic session system
+
+Create a diagnostic session system appropriate to the platform.
+
+Each session should normally have:
+
+- UUID or equivalent session ID
+- optional human-readable session label
+- UTC start timestamp
+- monotonic elapsed-time origin
+- sequence counter
+- app version
+- build/version code where applicable
+- optional active test ID
+- optional active test-step ID
+
+Starting a guided test should normally start a fresh diagnostic session or otherwise create an unambiguous test-session boundary.
+
+## 4. Central structured event logger
 
 Use one central diagnostic event system whenever possible.
+
+Prefer JSON Lines / JSONL or another structured append-friendly format that can be read both by people and tools.
 
 Useful fields include:
 
@@ -61,7 +132,7 @@ Useful fields include:
 
 Not every event needs every field.
 
-## 3. IDs and correlation
+## 5. IDs and correlation
 
 Generate separate IDs when applicable for:
 
@@ -74,7 +145,7 @@ Generate separate IDs when applicable for:
 
 All events caused by an important user request should share a correlation ID.
 
-## 4. Timing and order
+## 6. Timing and order
 
 Each event should include:
 
@@ -84,9 +155,11 @@ Each event should include:
 
 This supports reliable chronological reconstruction and performance timing.
 
-## 5. User-action monitoring
+## 7. User-action monitoring
 
-Record important semantic actions before executing them, such as:
+Instrument the important interactions that THIS program actually contains.
+
+Record important semantic actions before executing them whenever practical, such as:
 
 - buttons
 - menus
@@ -112,7 +185,26 @@ action=SPLIT_REQUESTED
 
 Do not imply that Split succeeded.
 
-## 6. Optional raw touch/pointer trace
+## 8. Automatic/programmatic actions
+
+Diagnostics must also cover important behavior that occurs without a direct button press.
+
+Examples include:
+
+- automatic processing
+- background workers
+- scheduled jobs
+- auto-save
+- reconnect/retry
+- automatic validation
+- automatic file discovery
+- asynchronous responses
+- external-device callbacks
+- state changes triggered by the system rather than the user
+
+The diagnostic system must cover important software behavior, not only UI clicks.
+
+## 9. Optional raw touch/pointer trace
 
 Raw touch/click coordinates may be captured when useful for UI diagnosis, but they are supplemental.
 
@@ -120,7 +212,7 @@ A touch proves only that input occurred at a location, not that a command succee
 
 Throttle/de-duplicate continuous pointer input so logs do not explode.
 
-## 7. Keyboard privacy
+## 10. Keyboard privacy
 
 Do not implement unrestricted raw keystroke logging by default.
 
@@ -130,7 +222,7 @@ Prefer meaningful state changes, such as:
 
 SETTING_CHANGE | bitrate 4500 → 800
 
-## 8. Before/after state and settings
+## 11. Before/after state and settings
 
 Where useful, record previous and resulting values.
 
@@ -141,7 +233,7 @@ Examples:
 - selectedClip: Clip 2 → Clip 3
 - state: BUFFERING → PLAYING
 
-## 9. Navigation and lifecycle
+## 12. Navigation and lifecycle
 
 Where diagnostically useful, record:
 
@@ -154,7 +246,7 @@ Where diagnostically useful, record:
 
 These are important for rotation, backgrounding, file-picker returns, and long-running tasks.
 
-## 10. Persistent rolling Action Trace
+## 13. Persistent rolling Action Trace
 
 Maintain a bounded persistent trace on disk independent of any one operation.
 
@@ -168,7 +260,7 @@ It should normally survive ordinary app restarts/process restarts when app data 
 
 Do not allow unlimited log growth.
 
-## 11. Recent event buffer
+## 14. Recent event buffer
 
 Also maintain a bounded recent-event buffer, for example:
 
@@ -179,7 +271,7 @@ Use it to quickly preserve immediate pre-failure history.
 
 The persistent event stream remains authoritative.
 
-## 12. Prompt persistence
+## 15. Prompt persistence
 
 Important diagnostic events should be flushed promptly enough that a crash does not erase the whole session.
 
@@ -192,7 +284,7 @@ Especially persist:
 - stage completion
 - crash markers
 
-## 13. Long-running operation/run monitoring
+## 16. Long-running operation/run monitoring
 
 Give complex operations a unique run/operation ID.
 
@@ -221,7 +313,11 @@ Applicable examples:
 - database jobs
 - AI/ML processing
 
-## 14. Progress and stall detection
+## 17. Progress and stall detection
+
+Throttle or summarize high-frequency diagnostic sources such as continuous slider movement, dragging, pointer motion, sensors, progress callbacks, frame-by-frame processing, or rapidly repeated state samples.
+
+Record enough information to diagnose behavior without generating excessive logs.
 
 Record meaningful progress, such as:
 
@@ -241,7 +337,7 @@ Record watchdog/stall events with the last known progress.
 
 Where practical, also use a lightweight UI/main-thread responsiveness watchdog.
 
-## 15. Dependency and precondition checks
+## 18. Dependency and precondition checks
 
 Before fragile operations, record readiness such as:
 
@@ -255,9 +351,11 @@ Before fragile operations, record readiness such as:
 
 Precondition failures should be persisted as diagnostic events, not only displayed temporarily.
 
-## 16. Result validation
+## 19. Result validation
 
-Do not equate process completion with feature success.
+For every important action, identify the internal signal that proves the requested operation actually occurred.
+
+Do not equate a button press, command selection, progress indicator, UI change, or process completion with feature success.
 
 Examples:
 
@@ -283,7 +381,7 @@ Encode:
 - readiness flag true
 - required quality metrics satisfied
 
-## 17. Structured result reports
+## 20. Structured result reports
 
 For complex operations, save structured operation/stage reports separately from the chronological event stream.
 
@@ -293,7 +391,7 @@ Result report answers: **what did the operation produce?**
 
 Include useful metrics, warnings, readiness, quality values, and output details.
 
-## 18. Rejection reasons
+## 21. Rejection reasons
 
 When processing multiple candidates/items, preserve individual rejection reasons.
 
@@ -305,7 +403,7 @@ Pair C/D — rejected: invalid geometry
 
 This helps locate the first actual limitation.
 
-## 19. Dependency invalidation
+## 22. Dependency invalidation
 
 For staged pipelines, rebuilding an upstream stage must invalidate stale downstream results.
 
@@ -313,7 +411,9 @@ Record the invalidation.
 
 Never leave old downstream results appearing current after a prerequisite changed.
 
-## 20. Central error logging
+## 23. Central error logging
+
+Do not silently swallow important failures.
 
 Important caught errors should preserve when appropriate:
 
@@ -332,11 +432,11 @@ Important caught errors should preserve when appropriate:
 
 Log lower-level subsystem failures before they become higher-level user-facing symptoms.
 
-## 21. Global crash preservation
+## 24. Global crash preservation
 
 When supported, install a global uncaught-exception handler.
 
-Before normal platform crash handling continues, preserve:
+Before normal platform crash handling continues, attempt to preserve:
 
 - crash timestamp
 - exception type/message
@@ -346,13 +446,16 @@ Before normal platform crash handling continues, preserve:
 - current screen
 - active operation
 - current guided test
+- current event-log filename/reference
 - recent event history
 
 Do not suppress normal OS crash behavior.
 
-## 22. Optional resource/environment telemetry
+## 25. Device/environment and input metadata
 
-For resource-intensive operations, optionally capture:
+Collect only environment and input metadata relevant to diagnosing THIS application.
+
+Useful environment fields may include:
 
 - foreground/background
 - CPU
@@ -368,11 +471,42 @@ For resource-intensive operations, optionally capture:
 
 Use only where diagnostically valuable.
 
-## 23. Diagnostic export
+For files, projects, media, documents, datasets, or other inputs, record safe metadata needed for reproduction, such as:
+
+- filename/display name
+- type/format
+- size
+- dimensions
+- item/record count
+- relevant processing parameters
+
+Do not automatically include sensitive original content in diagnostics.
+
+## 26. Performance timing
+
+Measure important operation durations with a monotonic clock.
+
+Examples include:
+
+- load
+- save
+- import
+- export
+- processing
+- rendering
+- conversion
+- query
+- analysis
+- network call
+- initialization
+
+## 27. Diagnostic export
 
 Provide an obvious **Export Diagnostics** control.
 
 Prefer a single ZIP package for complex applications.
+
+At the end of guided testing, also provide an **Export Test + Diagnostics** path when practical.
 
 Recommended contents:
 
@@ -381,7 +515,7 @@ Recommended contents:
 - events.jsonl
 - action_trace.txt
 - test_report.txt
-- test_report.json
+- guided_test_results.json or equivalent structured test results
 - errors.txt
 - crash.json / previous crash data
 - device/app metadata
@@ -393,7 +527,33 @@ Recommended contents:
 
 Do not automatically include the user's private source media/documents.
 
-## 24. Normal and extended reports
+## 28. Diagnostic summary and machine-readable results
+
+The export should include a human-readable summary containing:
+
+- app version/build
+- session ID
+- test ID when applicable
+- overall result
+- step results
+- step durations
+- first failed step
+- important errors
+- safe input metadata
+- relevant environment metadata
+- filenames included in the package
+
+Machine-readable guided-test results should include:
+
+- test ID
+- overall status
+- completed/interrupted state
+- current step if interrupted
+- per-step results
+- durations
+- messages/evidence
+
+## 29. Normal and extended reports
 
 Complex programs may provide:
 
@@ -401,7 +561,7 @@ Complex programs may provide:
 
 **Extended Diagnostic Report** — full retained logs, raw technical metadata, telemetry samples, stack traces, capability data, and detailed per-item analysis.
 
-## 25. Export diagnostics must diagnose themselves
+## 30. Export diagnostics must diagnose themselves
 
 Record:
 
@@ -418,7 +578,7 @@ ERROR → DIAGNOSTIC_EXPORT_FAILED
 
 Do not stop at "export started."
 
-## 26. First-real-failure rule
+## 31. First-real-failure rule
 
 During diagnosis, identify the earliest event where actual behavior diverged from expected behavior.
 
@@ -426,7 +586,7 @@ Do not assume the final visible error is the root cause.
 
 Later symptoms should reference originating failure events when known.
 
-## 27. Privacy/redaction
+## 32. Privacy/redaction
 
 Pass diagnostic information through a sanitizer/redactor before persistence/export.
 
@@ -445,17 +605,54 @@ Prefer generated IDs and safe metadata.
 
 Diagnostics should remain local until the user explicitly exports/shares them.
 
-## 28. New-feature diagnostic requirement
+## 33. Mandatory per-feature diagnostic requirement
 
-Every important new user-facing feature should define:
+Every important new user-facing feature, background feature, or automatic operation should add or update:
 
-1. user-action event
+1. user-action or trigger event
 2. operation/request event
-3. actual-result/state event
-4. error handling
-5. PASS criteria
-6. FAIL criteria
-7. guided test coverage
-8. diagnostic export coverage
+3. state/progress events
+4. actual-result event
+5. error handling
+6. request/operation correlation when asynchronous
+7. relevant before/after state
+8. timing where useful
+9. PASS criteria
+10. FAIL criteria
+11. guided test coverage
+12. diagnostic export coverage
 
 A feature is not diagnostically complete merely because code exists.
+
+## 34. Development/error-correction workflow
+
+When a failure occurs:
+
+1. Read the diagnostic summary.
+2. Identify the failed test step or failed operation.
+3. Inspect chronological events.
+4. Find the first abnormal event/state.
+5. Inspect error/exception details.
+6. Make the smallest evidence-based fix.
+7. Retest.
+8. Save the result and update project memory/checkpoint.
+
+Do not randomly rewrite unrelated working code.
+
+## Final diagnostic requirement
+
+The diagnostic system should allow a developer to reconstruct:
+
+**WHAT THE USER DID OR WHAT TRIGGERED THE OPERATION**
+
+→ **WHAT THE SOFTWARE ATTEMPTED**
+
+→ **WHAT INTERNAL STATE/PROGRESS OCCURRED**
+
+→ **WHAT ACTUALLY HAPPENED**
+
+→ **WHERE THE FIRST REAL FAILURE OCCURRED**
+
+→ **WHY THE TEST PASSED OR FAILED**
+
+without relying on the user to remember ordinary diagnostic details.
