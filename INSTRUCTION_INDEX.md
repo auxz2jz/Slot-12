@@ -18,6 +18,8 @@ Read this file first.
    - End-of-session handoff
 
 2. **DIAGNOSTICS_STANDARD.md**
+   - Mandatory for every program
+   - Inspect actual controls/workflows before instrumentation
    - Persistent action trace
    - Button/user-action logging
    - Request/state/result separation
@@ -29,6 +31,7 @@ Read this file first.
    - Privacy/redaction
 
 3. **GUIDED_TESTING_STANDARD.md**
+   - Tests derived from the program's actual features
    - "Test This Version" workflow
    - Step-by-step user instructions
    - Expected results
