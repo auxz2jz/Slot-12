@@ -1,14 +1,30 @@
 # Guided Testing Standard
 
-This standard defines the reusable step-by-step testing system to build into applications when practical.
+This standard defines the reusable step-by-step testing system that accompanies the mandatory diagnostics architecture.
 
-## 1. "Test This Version"
+Tests must be created from the actual features of the program being inspected. Do not copy tests from another application merely because they are convenient examples.
+
+## 1. Build tests from the program's actual features
+
+Before defining the guided test catalog:
+
+1. inspect the application's current controls and workflows;
+2. identify important features, background jobs, file operations, outputs, and state transitions;
+3. identify the internal signal that proves each feature actually worked;
+4. identify visual/subjective behavior requiring human confirmation;
+5. identify realistic failure and timeout conditions.
+
+Create tests for THIS program's real functionality.
+
+Examples from other programs are explanatory only and must not create nonexistent controls or workflows.
+
+## 2. "Test This Version"
 
 Each testable candidate should be able to provide a user-facing **Test This Version** workflow.
 
 The guide should identify the exact version/build under test and present one test step at a time.
 
-## 2. Persistent test session
+## 3. Persistent test session
 
 Each guided test run should receive a unique:
 
@@ -23,7 +39,7 @@ Each guided test run should receive a unique:
 
 Events generated during testing should carry the test session ID.
 
-## 3. Test progress survives restart
+## 4. Test progress survives restart
 
 Persist:
 
@@ -35,7 +51,7 @@ Persist:
 
 Closing/reopening the app should not force the user to restart a long test sequence.
 
-## 4. TestStep structure
+## 5. TestStep structure
 
 Every test step should contain:
 
@@ -53,7 +69,7 @@ Every test step should contain:
 
 Use the exact labels/buttons visible in the application.
 
-## 5. Clear instructions
+## 6. Clear instructions
 
 Preferred format:
 
@@ -65,7 +81,7 @@ The box should remain on the selected object while it moves.
 
 Avoid vague technical wording when a direct user instruction is possible.
 
-## 6. Explicit no-operation tests
+## 7. Explicit no-operation tests
 
 If a step does not require an encode/build/render/network operation, say so clearly:
 
@@ -73,13 +89,13 @@ If a step does not require an encode/build/render/network operation, say so clea
 
 This prevents unnecessary work and confusion.
 
-## 7. Apply controlled test settings
+## 8. Apply controlled test settings
 
 When a test requires many controlled values, provide **Apply Test Settings** where practical.
 
 Automatically configure test parameters while preserving user-specific input selections that should remain.
 
-## 8. Automatic PASS/FAIL verification
+## 9. Automatic PASS/FAIL verification
 
 Where behavior is objectively measurable, the application should verify the expected result itself.
 
@@ -103,7 +119,7 @@ Example — export:
 5. output validated
 6. PASS
 
-## 9. Human visual confirmation
+## 10. Human visual confirmation
 
 Some results are subjective or visual.
 
@@ -127,7 +143,7 @@ Automatic requirements:
 Then enable:
 **Tracking Looks Correct**
 
-## 10. Manual failure control
+## 11. Manual failure control
 
 Every active test should provide an option such as:
 
@@ -148,7 +164,7 @@ Record:
 - correlation ID
 - recent diagnostics
 
-## 11. Result source
+## 12. Result source
 
 Every test result should identify how it was determined.
 
@@ -165,7 +181,7 @@ Recommended values:
 
 This separates software-proven success from tester-reported success.
 
-## 12. False-positive protection
+## 13. False-positive protection
 
 Tests must measure the intended behavior, not incidental activity.
 
@@ -181,7 +197,7 @@ Process returned exit code 0 → PASS.
 Better:
 Process returned success, output exists, output is non-empty, and expected result properties validate.
 
-## 13. Timeouts
+## 14. Timeouts
 
 Where appropriate, expected states should have a reasonable timeout.
 
@@ -196,7 +212,7 @@ If not:
 TEST_RESULT=FAIL  
 reason=Playback did not begin within timeout
 
-## 14. Step progression
+## 15. Step progression
 
 When a step begins, record:
 
@@ -221,7 +237,7 @@ At completion:
 TEST → GUIDED_TEST_FINISHED  
 overall=PASS/FAIL/PARTIAL
 
-## 15. Tester notes
+## 16. Tester notes
 
 Allow an optional note on successful steps and a required/encouraged explanation for manual failures.
 
@@ -231,7 +247,7 @@ Useful prompt:
 - what you expected
 - what actually happened
 
-## 16. Test report
+## 17. Test report
 
 Generate both:
 
@@ -256,21 +272,21 @@ Include:
 - relevant diagnostic event IDs
 - current state snapshot
 
-## 17. Report fingerprint
+## 18. Report fingerprint
 
 A report may include a fingerprint/hash to identify whether two exports represent the same captured state.
 
 A fingerprint does not replace session/event/correlation IDs.
 
-## 18. Test and diagnostics integration
+## 19. Test and diagnostics integration
 
 A guided test should run inside a diagnostic session or otherwise be strongly correlated with diagnostics.
 
 When a test fails, exported diagnostics should automatically include the relevant test session and recent event history.
 
-## 19. Every user-facing feature should have a test
+## 20. Every important feature should have test coverage
 
-For each new user-facing feature define:
+For each important user-facing feature, background operation, or automatic process that can materially fail, define appropriate test coverage:
 
 - what the tester does
 - expected behavior
@@ -281,7 +297,7 @@ For each new user-facing feature define:
 
 Do not mark a feature DONE solely because code was implemented.
 
-## 20. Test evidence remains authoritative
+## 21. Test evidence remains authoritative
 
 If a summary reports PASS but raw chronological diagnostic evidence shows incorrect behavior, the raw evidence must trigger investigation.
 
